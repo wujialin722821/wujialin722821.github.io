@@ -21,15 +21,12 @@
   // Year
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Email copy
+  // Email mailto (link is a mailto in HTML). Keep a small feedback on click
   const emailEl = document.getElementById('email-link');
-  emailEl.addEventListener('click', e => {
-    e.preventDefault();
-    const email = '13368194821wjl@gmail.com';
-    navigator.clipboard?.writeText(email).then(()=> {
-      emailEl.textContent = email + ' (已复制)';
-      setTimeout(()=> emailEl.textContent = email, 1500);
-    }).catch(()=> alert(email));
+  emailEl.addEventListener('click', () => {
+    // no preventDefault so mailto will open. Add a small visual feedback
+    emailEl.classList.add('clicked');
+    setTimeout(()=> emailEl.classList.remove('clicked'), 1200);
   });
 
   // Particles canvas

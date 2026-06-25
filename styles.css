@@ -43,6 +43,9 @@ body{
 /* Layout */
 .container{position:relative;z-index:5;padding:120px 24px 60px;max-width:1100px;margin:0 auto}
 .hero{padding:40px 20px 80px;text-align:center}
+.hero-inner{display:flex;align-items:center;gap:18px;justify-content:center}
+#profile{width:120px;height:120px;border-radius:12px;object-fit:cover;border:2px solid rgba(255,255,255,0.06);box-shadow:0 6px 20px rgba(0,0,0,0.6),0 0 28px rgba(0,240,255,0.06);}
+
 h1.glitch{font-family:"Orbitron",sans-serif;font-size:64px;margin:0;line-height:1;color:transparent;position:relative}
 h1.glitch span{display:block}
 h1.glitch .eng{font-size:22px;opacity:0.7;margin-top:6px;color:#9be8ff}
@@ -106,6 +109,7 @@ body::after{
 
 /* Responsive */
 @media (max-width:720px){
+  .hero-inner{flex-direction:column}
   h1.glitch{font-size:40px}
   .topbar{padding:12px 18px}
   .container{padding-top:100px}
