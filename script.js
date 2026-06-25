@@ -25,7 +25,7 @@
   const emailEl = document.getElementById('email-link');
   emailEl.addEventListener('click', e => {
     e.preventDefault();
-    const email = 'dennis@example.com';
+    const email = '13368194821wjl@gmail.com';
     navigator.clipboard?.writeText(email).then(()=> {
       emailEl.textContent = email + ' (已复制)';
       setTimeout(()=> emailEl.textContent = email, 1500);
