@@ -1,0 +1,112 @@
+:root{
+  --bg-1: #05030a;
+  --neon-pink: #ff2d95;
+  --neon-cyan: #00f0ff;
+  --glass: rgba(255,255,255,0.04);
+  --accent: linear-gradient(90deg,var(--neon-pink),var(--neon-cyan));
+  --glass-border: rgba(255,255,255,0.06);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background: radial-gradient(ellipse at 20% 10%, rgba(0,240,255,0.04), transparent 10%),
+              radial-gradient(ellipse at 80% 80%, rgba(255,45,149,0.03), transparent 10%),
+              var(--bg-1);
+  overflow-x:hidden;
+  color:#cfeff8;
+}
+
+/* Canvas background full-screen */
+#bg-canvas{position:fixed;inset:0;z-index:0;display:block}
+
+/* Topbar */
+.topbar{
+  position:fixed;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center;
+  padding:14px 36px;z-index:6;background:linear-gradient(180deg, rgba(0,0,0,0.25), transparent);
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  backdrop-filter: blur(6px);
+}
+.logo{display:flex;gap:10px;align-items:baseline}
+.logo .neon{
+  font-family:"Orbitron", sans-serif;color:var(--neon-pink);font-weight:700;letter-spacing:0.6px;font-size:18px;
+  text-shadow:0 0 8px rgba(255,45,149,0.35),0 0 24px rgba(255,45,149,0.12);
+}
+.logo .alt{font-size:12px;opacity:0.8;color:#9be8ff}
+
+/* Nav */
+.topbar nav a{color:#9be8ff;text-decoration:none;margin-left:18px;font-weight:500;opacity:0.85}
+.topbar nav a:hover{color:var(--neon-cyan);text-shadow:0 0 8px rgba(0,240,255,0.12)}
+
+/* Layout */
+.container{position:relative;z-index:5;padding:120px 24px 60px;max-width:1100px;margin:0 auto}
+.hero{padding:40px 20px 80px;text-align:center}
+h1.glitch{font-family:"Orbitron",sans-serif;font-size:64px;margin:0;line-height:1;color:transparent;position:relative}
+h1.glitch span{display:block}
+h1.glitch .eng{font-size:22px;opacity:0.7;margin-top:6px;color:#9be8ff}
+h1.glitch::before, h1.glitch::after{
+  content:attr(data-text);
+  position:absolute;left:0;top:0;width:100%;height:100%;
+}
+h1.glitch{color:transparent}
+h1.glitch span{position:relative;color:#e6fbff;filter:drop-shadow(0 0 18px rgba(0,240,255,0.06))}
+
+/* Glitch effect (simple) */
+.glitch span{
+  mix-blend-mode:screen;
+}
+.glitch span:first-child{
+  animation:glitch-anim 3s infinite;
+}
+@keyframes glitch-anim{
+  0%{transform:translate(0,0)}
+  20%{transform:translate(-2px,0)}
+  21%{transform:translate(0,0)}
+  40%{transform:translate(2px,0)}
+  41%{transform:translate(0,0)}
+  60%{transform:translate(-1px,0)}
+  61%{transform:translate(0,0)}
+  100%{transform:translate(0,0)}
+}
+
+.subtitle{margin-top:8px;color:rgba(180,240,255,0.8);opacity:0.9}
+.typewriter{height:30px;margin-top:14px;font-weight:600;color:var(--neon-cyan);font-family:Monaco,Consolas,"Courier New",monospace}
+
+/* CTA buttons */
+.cta{margin-top:20px;display:flex;gap:12px;justify-content:center}
+.btn{
+  background:var(--accent);color:#05040a;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:700;
+  box-shadow:0 6px 18px rgba(0,0,0,0.6),0 0 22px rgba(0,240,255,0.06);
+}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#9be8ff}
+.btn:hover{transform:translateY(-3px);transition:all .18s ease}
+
+/* Panels */
+.panel{margin:36px 0;padding:22px;background:linear-gradient(180deg, rgba(255,255,255,0.015), transparent);border-radius:12px;border:1px solid var(--glass-border);backdrop-filter: blur(6px)}
+.panel h2{font-family:"Orbitron";color:var(--neon-pink);margin:0 0 10px 0}
+
+/* Cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card{padding:14px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)}
+.card h3{margin:0 0 6px 0;color:#fff}
+
+/* Skills */
+.skills-list{display:flex;flex-wrap:wrap;gap:10px;list-style:none;padding:0;margin:0}
+.skills-list li{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:8px 12px;border-radius:8px}
+
+/* Footer */
+.footer{margin-top:30px;text-align:center;color:rgba(200,230,240,0.6);font-size:13px;padding:18px}
+
+/* Scanline overlay */
+body::after{
+  content:"";pointer-events:none;position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px);background-size:100% 3px;mix-blend-mode:overlay;z-index:4;
+}
+
+/* Responsive */
+@media (max-width:720px){
+  h1.glitch{font-size:40px}
+  .topbar{padding:12px 18px}
+  .container{padding-top:100px}
+}

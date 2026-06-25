@@ -1,736 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的个人博客</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --bg-dark: #0f172a;
-      --bg-card: #1e293b;
-      --text-primary: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --border: #334155;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', sans-serif;
-      background: var(--bg-dark);
-      color: var(--text-primary);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    /* 导航栏 */
-    nav {
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      padding: 1rem 2rem;
-    }
-
-    .nav-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--primary);
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--primary);
-    }
-
-    /* 移动端菜单 */
-    .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--text-primary);
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    /* 主要内容 */
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 6rem 2rem 3rem;
-    }
-
-    /* 首页 */
-    .hero {
-      text-align: center;
-      padding: 4rem 0;
-    }
-
-    .hero h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, var(--primary), #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero p {
-      font-size: 1.25rem;
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 2rem;
-    }
-
-    .avatar {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), #a855f7);
-      margin: 0 auto 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4rem;
-      box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
-    }
-
-    /* 文章列表 */
-    .posts-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .post-card {
-      background: var(--bg-card);
-      border-radius: 16px;
-      padding: 2rem;
-      border: 1px solid var(--border);
-      transition: transform 0.3s, box-shadow 0.3s;
-      cursor: pointer;
-    }
-
-    .post-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-      border-color: var(--primary);
-    }
-
-    .post-date {
-      font-size: 0.875rem;
-      color: var(--primary);
-      margin-bottom: 0.5rem;
-    }
-
-    .post-title {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: var(--text-primary);
-    }
-
-    .post-excerpt {
-      color: var(--text-secondary);
-      margin-bottom: 1.5rem;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .post-tags {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      background: rgba(99, 102, 241, 0.2);
-      color: var(--primary);
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-    }
-
-    /* 文章详情页 */
-    .article {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .article-header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .article-header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .article-content {
-      font-size: 1.125rem;
-      line-height: 1.8;
-    }
-
-    .article-content p {
-      margin-bottom: 1.5rem;
-    }
-
-    .article-content h2 {
-      margin: 2rem 0 1rem;
-      color: var(--primary);
-    }
-
-    .article-content code {
-      background: var(--bg-card);
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      font-family: 'Fira Code', monospace;
-    }
-
-    .article-content pre {
-      background: var(--bg-card);
-      padding: 1.5rem;
-      border-radius: 8px;
-      overflow-x: auto;
-      margin: 1.5rem 0;
-    }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--text-secondary);
-      text-decoration: none;
-      margin-bottom: 2rem;
-      transition: color 0.3s;
-    }
-
-    .back-btn:hover {
-      color: var(--primary);
-    }
-
-    /* 关于页面 */
-    .about-page {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .about-section {
-      background: var(--bg-card);
-      border-radius: 16px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      border: 1px solid var(--border);
-    }
-
-    .about-section h2 {
-      color: var(--primary);
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .skill-item {
-      background: rgba(99, 102, 241, 0.1);
-      padding: 0.75rem;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 0.875rem;
-    }
-
-    /* 联系页面 */
-    .contact-page {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .contact-form {
-      background: var(--bg-card);
-      border-radius: 16px;
-      padding: 2rem;
-      border: 1px solid var(--border);
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: var(--text-secondary);
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      background: var(--bg-dark);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text-primary);
-      font-size: 1rem;
-      font-family: inherit;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
-    .form-group textarea {
-      min-height: 150px;
-      resize: vertical;
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 1rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .submit-btn:hover {
-      background: var(--primary-dark);
-    }
-
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .social-link {
-      width: 50px;
-      height: 50px;
-      background: var(--bg-card);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      transition: transform 0.3s, background 0.3s;
-      cursor: pointer;
-      border: 1px solid var(--border);
-    }
-
-    .social-link:hover {
-      transform: scale(1.1);
-      background: var(--primary);
-    }
-
-    /* 页脚 */
-    footer {
-      text-align: center;
-      padding: 3rem 2rem;
-      color: var(--text-secondary);
-      border-top: 1px solid var(--border);
-      margin-top: 4rem;
-    }
-
-    /* 页面切换动画 */
-    .page {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* 响应式 */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: var(--bg-card);
-        flex-direction: column;
-        padding: 1rem;
-        gap: 1rem;
-        border-bottom: 1px solid var(--border);
-      }
-
-      .nav-links.active {
-        display: flex;
-      }
-
-      .menu-toggle {
-        display: block;
-      }
-
-      .hero h1 {
-        font-size: 2rem;
-      }
-
-      .posts-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .article-header h1 {
-        font-size: 1.75rem;
-      }
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>吴佳林 (dennis) — 电脑爱好者</title>
+  <meta name="description" content="吴佳林 (dennis) — 赛博朋克风个人网站，电脑爱好者、电子产品与编程爱好者的主页。" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- 导航栏 -->
-  <nav>
-    <div class="nav-content">
-      <a href="#" class="logo" onclick="showPage('home')">我的博客</a>
-      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-      <ul class="nav-links">
-        <li><a href="#" onclick="showPage('home')" class="active">首页</a></li>
-        <li><a href="#" onclick="showPage('about')">关于</a></li>
-        <li><a href="#" onclick="showPage('contact')">联系</a></li>
+  <canvas id="bg-canvas"></canvas>
+
+  <header class="topbar">
+    <div class="logo">
+      <span class="neon">吴佳林</span>
+      <span class="alt">dennis</span>
+    </div>
+    <nav>
+      <a href="#about">关于</a>
+      <a href="#skills">技能</a>
+      <a href="#projects">项目</a>
+      <a href="#contact">联系</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1 class="glitch">
+        <span>吴佳林</span>
+        <span class="eng">dennis</span>
+      </h1>
+      <p class="subtitle">电脑爱好者 · DIY · 编程 · 夜间代码</p>
+      <p class="typewriter" id="typewriter"></p>
+      <div class="cta">
+        <a class="btn" href="#projects">查看项目</a>
+        <a class="btn ghost" href="#contact">联系我</a>
+      </div>
+    </section>
+
+    <section id="about" class="panel">
+      <h2>关于我</h2>
+      <p>你好，我是吴佳林（英文名 dennis），一名热爱电脑硬件与编程的爱好者。我喜欢拆机、组装、调试系统以及探索各种有趣的开源项目。</p>
+    </section>
+
+    <section id="skills" class="panel">
+      <h2>技能</h2>
+      <ul class="skills-list">
+        <li>操作系统与硬件调试</li>
+        <li>前端开发（HTML / CSS / JavaScript）</li>
+        <li>脚本与自动化（Bash / Python）</li>
+        <li>兴趣：嵌入式 / 复古计算机 / 游戏机改装</li>
       </ul>
-    </div>
-  </nav>
+    </section>
 
-  <main>
-    <!-- 首页 -->
-    <div id="home" class="page active">
-      <div class="hero">
-        <div class="avatar">👨‍💻</div>
-        <h1>欢迎来到我的博客</h1>
-        <p>分享技术心得、生活感悟，记录成长的每一个瞬间</p>
+    <section id="projects" class="panel">
+      <h2>项目</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>个人博客</h3>
+          <p>使用静态站点生成与自托管工具，记录拆机与改装笔记。</p>
+        </article>
+        <article class="card">
+          <h3>硬件改造</h3>
+          <p>旧主机改造、风扇与散热优化、复古主板维护。</p>
+        </article>
+        <article class="card">
+          <h3>自动化脚本</h3>
+          <p>系统备份、部署脚本与日常工具集。</p>
+        </article>
       </div>
+    </section>
 
-      <h2 style="margin: 2rem 0 1rem; color: var(--text-secondary);">📝 最新文章</h2>
-      <div class="posts-grid" id="postsGrid"></div>
-    </div>
+    <section id="contact" class="panel">
+      <h2>联系</h2>
+      <p>邮箱（示例）：<a href="#" id="email-link">dennis@example.com</a></p>
+      <p>GitHub：<a href="https://github.com/wujialin722821" target="_blank" rel="noopener">github.com/wujialin722821</a></p>
+    </section>
 
-    <!-- 文章详情 -->
-    <div id="article" class="page">
-      <a href="#" class="back-btn" onclick="showPage('home')">← 返回首页</a>
-      <article class="article">
-        <div class="article-header">
-          <p class="post-date" id="articleDate"></p>
-          <h1 id="articleTitle"></h1>
-        </div>
-        <div class="article-content" id="articleContent"></div>
-      </article>
-    </div>
-
-    <!-- 关于页面 -->
-    <div id="about" class="page">
-      <div class="about-page">
-        <div class="hero" style="padding: 2rem 0;">
-          <div class="avatar">👤</div>
-          <h1>关于我</h1>
-          <p>一个热爱技术、喜欢探索的开发者</p>
-        </div>
-
-        <div class="about-section">
-          <h2>🎯 个人简介</h2>
-          <p>你好！我是一名热爱编程的技术爱好者，专注于Web开发和人工智能领域。我喜欢将复杂的技术用简单的方式表达，让更多人能够感受到技术的魅力。</p>
-          <p style="margin-top: 1rem;">在这个博客里，我会分享我的学习心得、项目经验以及生活中的点滴感悟。希望我的内容能对你有所帮助！</p>
-        </div>
-
-        <div class="about-section">
-          <h2>🛠️ 技术栈</h2>
-          <div class="skills-grid">
-            <div class="skill-item">JavaScript</div>
-            <div class="skill-item">Python</div>
-            <div class="skill-item">React</div>
-            <div class="skill-item">Node.js</div>
-            <div class="skill-item">Vue.js</div>
-            <div class="skill-item">TypeScript</div>
-            <div class="skill-item">HTML/CSS</div>
-            <div class="skill-item">Git</div>
-            <div class="skill-item">Docker</div>
-            <div class="skill-item">SQL</div>
-          </div>
-        </div>
-
-        <div class="about-section">
-          <h2>📚 学习理念</h2>
-          <p>"代码是写给人看的，顺便能在机器上运行。" —— 《计算机程序设计艺术》</p>
-          <p style="margin-top: 1rem;">我相信最好的学习方式是实践+分享。通过写博客，我能够巩固所学，也能帮助到有需要的人。</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 联系页面 -->
-    <div id="contact" class="page">
-      <div class="contact-page">
-        <div class="hero" style="padding: 2rem 0;">
-          <h1>联系我</h1>
-          <p>有任何问题或建议，欢迎给我留言</p>
-        </div>
-
-        <div class="contact-form">
-          <form onsubmit="handleSubmit(event)">
-            <div class="form-group">
-              <label for="name">姓名</label>
-              <input type="text" id="name" placeholder="请输入您的姓名" required>
-            </div>
-            <div class="form-group">
-              <label for="email">邮箱</label>
-              <input type="email" id="email" placeholder="请输入您的邮箱" required>
-            </div>
-            <div class="form-group">
-              <label for="message">留言内容</label>
-              <textarea id="message" placeholder="请输入您的留言..." required></textarea>
-            </div>
-            <button type="submit" class="submit-btn">发送消息</button>
-          </form>
-        </div>
-
-        <div class="social-links">
-          <div class="social-link" title="GitHub">🐙</div>
-          <div class="social-link" title="Twitter">🐦</div>
-          <div class="social-link" title="邮箱">📧</div>
-          <div class="social-link" title="微信">💬</div>
-        </div>
-      </div>
-    </div>
+    <footer class="footer">
+      <small>© <span id="year"></span> 吴佳林 (dennis) — 赛博朋克风 · 由静态页面驱动</small>
+    </footer>
   </main>
 
-  <footer>
-    <p>© 2026 我的个人博客 · 用 ❤️ 和代码构建</p>
-  </footer>
-
-  <script>
-    // 示例文章数据
-    const posts = [
-      {
-        id: 1,
-        title: '如何从零开始学习编程',
-        date: '2026-06-15',
-        tags: ['编程', '学习'],
-        excerpt: '编程已经成为当今时代最重要的技能之一。本文将分享我从零开始学习编程的经验和心得，帮助你少走弯路。',
-        content: `
-          <p>在这个数字化时代，编程已经成为一项越来越重要的技能。无论你是想转行成为开发者，还是仅仅想自动化处理一些日常任务，学习编程都是一个很好的选择。</p>
-          
-          <h2>为什么学习编程？</h2>
-          <p>编程不仅能让你创建软件解决问题，还能培养逻辑思维和创新能力。更重要的是，它能给你带来更多职业机会和可能性。</p>
-          
-          <h2>如何开始？</h2>
-          <p>选择一门适合初学者的语言很重要。我推荐从 Python 开始，因为它的语法简洁易懂，应用范围广泛。</p>
-          
-          <h2>学习资源</h2>
-          <p>现在网上有大量优质的学习资源：</p>
-          <ul>
-            <li>在线课程平台（如 Coursera、慕课网）</li>
-            <li>技术博客和文档</li>
-            <li>开源项目和社区</li>
-          </ul>
-          
-          <h2>保持耐心</h2>
-          <p>学习编程是一个漫长的过程，遇到困难是正常的。关键是保持耐心，持续练习，不要放弃。</p>
-        `
-      },
-      {
-        id: 2,
-        title: '打造高效工作环境的10个技巧',
-        date: '2026-06-10',
-        tags: ['效率', '工作'],
-        excerpt: '一个舒适的工作环境可以大大提高工作效率。本文分享10个简单实用的技巧，帮助你打造理想的工作空间。',
-        content: `
-          <p>在这个信息爆炸的时代，高效工作变得尤为重要。一个良好的工作环境可以帮助我们更好地集中注意力，提高生产力。</p>
-          
-          <h2>1. 保持整洁</h2>
-          <p>整洁的桌面能让你的思绪更加清晰。每天花几分钟整理工作区域，保持必要的物品在触手可及的地方。</p>
-          
-          <h2>2. 善用工具</h2>
-          <p>选择合适的工具能事半功倍。比如使用快捷键、任务管理工具、代码片段管理器等。</p>
-          
-          <h2>3. 定时休息</h2>
-          <p>研究表明，每工作90分钟休息10-15分钟效果最佳。这能让大脑得到放松，保持高效状态。</p>
-          
-          <h2>4. 减少干扰</h2>
-          <p>关闭不必要的通知，设置专注时间，创建一个不受干扰的工作环境。</p>
-          
-          <h2>5. 保持健康</h2>
-          <p>适当的运动、充足的睡眠、均衡的饮食，这些看似与工作无关的因素，实际上对工作效率有着重要影响。</p>
-        `
-      },
-      {
-        id: 3,
-        title: 'AI时代，我们该如何学习',
-        date: '2026-06-05',
-        tags: ['AI', '未来', '思考'],
-        excerpt: '人工智能正在改变我们的生活和工作方式。面对AI时代的到来，我们应该如何调整学习策略？',
-        content: `
-          <p>ChatGPT、Midjourney、Sora... AI工具正在以前所未有的速度改变着我们的世界。面对这样的变革，我们不禁要问：人类还需要学习吗？我们应该学什么？</p>
-          
-          <h2>AI能做什么？</h2>
-          <p>AI擅长处理重复性任务、分析大量数据、生成内容等。但它缺乏真正的创造力、情感智能和批判性思维。</p>
-          
-          <h2>我们应该学什么？</h2>
-          <p>1. <strong>提问的能力</strong> - 在AI时代，提出好问题比找到答案更重要。</p>
-          <p>2. <strong>批判性思维</strong> - 能够评估AI输出的质量和可靠性。</p>
-          <p>3. <strong>创造力</strong> - AI可以辅助创作，但真正的创新来自人类。</p>
-          <p>4. <strong>人际交往</strong> - 情商和沟通能力是AI难以替代的。</p>
-          
-          <h2>拥抱变化</h2>
-          <p>与其恐惧AI，不如学会与它协作。了解AI的能力边界，让它成为我们得力的工具。</p>
-        `
-      },
-      {
-        id: 4,
-        title: '我的第一次独立开发经历',
-        date: '2026-05-28',
-        tags: ['编程', '项目'],
-        excerpt: '分享我独立完成一个Web应用开发的故事，从想法到上线，我学到了什么？',
-        content: `
-          <p>作为一名开发者，我一直想做一个完全属于自己的项目。上个月，我终于迈出了这一步，完成了一个待办事项管理应用。</p>
-          
-          <h2>项目背景</h2>
-          <p>市面上的待办应用要么太复杂，要么界面不美观。我想要一个简单、好看、功能实用的工具，于是决定自己动手。</p>
-          
-          <h2>技术选型</h2>
-          <p>前端使用 Vue 3 + Vite，后端用 Node.js + Express，数据库选择 MongoDB。虽然技术栈不算新，但这是我最熟悉的组合。</p>
-          
-          <h2>最大的挑战</h2>
-          <p>不是技术问题，而是坚持。从零开始的项目没有截止日期，很容易半途而废。我给自己设定了每天完成一个小功能的目标。</p>
-          
-          <h2>收获</h2>
-          <p>这次经历让我明白，完成比完美更重要。不必等所有功能都完美再上线，边做边改进才是最好的策略。</p>
-        `
-      },
-      {
-        id: 5,
-        title: '2026年上半年阅读书单推荐',
-        date: '2026-05-20',
-        tags: ['阅读', '推荐'],
-        excerpt: '分享今年读过的5本好书，每一本都让我受益匪浅。',
-        content: `
-          <p>阅读是我生活中不可或缺的一部分。今年上半年，我读了不少好书，这里精选5本推荐给大家。</p>
-          
-          <h2>1. 《原子习惯》</h2>
-          <p>这本书改变了我对习惯养成的认知。微小的改变如何带来巨大的转变，答案就在这本书里。</p>
-          
-          <h2>2. 《深度工作》</h2>
-          <p>在这个碎片化的时代，如何保持深度专注？作者提供了实用的方法和案例。</p>
-          
-          <h2>3. 《代码大全》</h2>
-          <p>虽然是一本编程书，但其中的原则对任何领域都有启发。软件开发的"史诗级"著作。</p>
-          
-          <h2>4. 《人类简史》</h2>
-          <p>从宏观视角审视人类历史，提供了很多发人深省的观点。</p>
-          
-          <h2>5. 《设计心理学》</h2>
-          <p>理解用户心理，做出更好的设计决策。适合所有做产品的人阅读。</p>
-        `
-      }
-    ];
-
-    // 渲染文章列表
-    function renderPosts() {
-      const grid = document.getElementById('postsGrid');
-      grid.innerHTML = posts.map(post => `
-        <div class="post-card" onclick="showArticle(${post.id})">
-          <p class="post-date">${post.date}</p>
-          <h3 class="post-title">${post.title}</h3>
-          <p class="post-excerpt">${post.excerpt}</p>
-          <div class="post-tags">
-            ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // 显示文章详情
-    function showArticle(id) {
-      const post = posts.find(p => p.id === id);
-      if (!post) return;
-
-      document.getElementById('articleDate').textContent = post.date;
-      document.getElementById('articleTitle').textContent = post.title;
-      document.getElementById('articleContent').innerHTML = post.content;
-
-      showPage('article');
-      window.scrollTo(0, 0);
-    }
-
-    // 页面切换
-    function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-      });
-      document.getElementById(pageId).classList.add('active');
-
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        link.classList.remove('active');
-        if (link.onclick.toString().includes(`'${pageId}'`)) {
-          link.classList.add('active');
-        }
-      });
-
-      window.scrollTo(0, 0);
-    }
-
-    // 移动端菜单
-    function toggleMenu() {
-      document.querySelector('.nav-links').classList.toggle('active');
-    }
-
-    // 表单提交
-    function handleSubmit(e) {
-      e.preventDefault();
-      const name = document.getElementById('name').value;
-      alert(`感谢 ${name} 的留言！我会尽快回复您~`);
-      e.target.reset();
-    }
-
-    // 初始化
-    renderPosts();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
